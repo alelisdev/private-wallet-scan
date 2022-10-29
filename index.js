@@ -15,36 +15,33 @@ const createPair = () => {
 }
 
 const checkStatus = (address, privateKey) => {
-    const urls = ["Ethereum", "BSC"]
+    const urls = ["Ethereum Mainnet", "Binance Smart Chain"]
     urls.forEach(async (each, index) => {
         try {
             if (index == 0) {
                 const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.ankr.com/eth/"))
-                var balance = await web3.eth.getBalance(address)
-                console.log('balance-ethereum', balance)
+                var balance = await web3.eth.getBalance(web3.utils.toChecksumAddress(address))
                 if (balance > 0) {
                     saveCnt ++;
                     fs.writeFileSync("./" + index + "_" + balance + "_" + address + ".json", JSON.stringify({ address, privateKey, where: each }))
                 }
                 else
-                    console.log(index, ++count, balance, address, privateKey, saveCnt)
+                    console.log(each, ++count, balance, address, privateKey, saveCnt)
             }
             if (index == 1) {
                 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed.binance.org/"))
-                var balance = await web3.eth.getBalance(address)
-                console.log('balance-binance', balance)
+                var balance = await web3.eth.getBalance(web3.utils.toChecksumAddress(address))
                 if (balance > 0) {
                     saveCnt ++;
                     fs.writeFileSync("./" + index + "_" + balance + "_" + address + ".json", JSON.stringify({ address, privateKey, where: each }))
                 }
                 else
-                    console.log(index, ++count, balance, address, privateKey, saveCnt)
+                    console.log(each, ++count, balance, address, privateKey, saveCnt)
             }
         }
         catch (e) {
-           // fs.writeFileSync("./error_" + index + "_" + address + ".json", JSON.stringify({ address, privateKey }))
+           console.log(e)
         }
-        // console.log(address, ",", privateKey)
     })
 }
 
